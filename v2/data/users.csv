@@ -1,0 +1,101 @@
+user_id,country,city,age_group,gender,language,income_bracket,interests,registration_date,last_active
+1,USA,New York,25-34,M,English,75k-100k,"[""Technology"", ""Photography"", ""Fitness"", ""Travel""]",2022-03-18,2025-04-02
+2,UK,London,35-44,F,English,50k-75k,"[""Books"", ""Cooking"", ""Gardening"", ""Yoga""]",2023-05-22,2025-04-05
+3,Canada,Toronto,18-24,Non-binary,English,25k-50k,"[""Gaming"", ""Anime"", ""Music"", ""Art""]",2022-11-03,2025-04-01
+4,Australia,Sydney,45-54,F,English,100k-150k,"[""Travel"", ""Wine"", ""Fitness"", ""Fashion""]",2021-07-12,2025-03-28
+5,Germany,Berlin,25-34,M,German,50k-75k,"[""Music"", ""Technology"", ""Cycling"", ""Films""]",2023-01-09,2025-04-04
+6,Japan,Tokyo,18-24,F,Japanese,25k-50k,"[""Fashion"", ""Anime"", ""Photography"", ""Cooking""]",2022-08-17,2025-03-29
+7,France,Paris,55-64,F,French,75k-100k,"[""Art"", ""Literature"", ""Wine"", ""Cooking""]",2021-11-14,2025-03-31
+8,USA,San Francisco,25-34,M,English,150k+,"[""Technology"", ""Hiking"", ""Sustainability"", ""Cooking""]",2023-04-20,2025-04-06
+9,India,Mumbai,35-44,M,Hindi,50k-75k,"[""Cricket"", ""Technology"", ""Cooking"", ""Meditation""]",2022-05-08,2025-04-03
+10,Brazil,Rio de Janeiro,18-24,F,Portuguese,25k-50k,"[""Dance"", ""Beach"", ""Fitness"", ""Fashion""]",2023-02-11,2025-03-30
+11,South Korea,Seoul,25-34,F,Korean,50k-75k,"[""K-pop"", ""Skincare"", ""Fashion"", ""Technology""]",2022-07-19,2025-04-05
+12,USA,Austin,35-44,M,English,75k-100k,"[""Music"", ""BBQ"", ""Hiking"", ""Craft Beer""]",2023-03-28,2025-04-02
+13,Italy,Rome,45-54,F,Italian,50k-75k,"[""Cooking"", ""History"", ""Wine"", ""Fashion""]",2021-09-12,2025-03-27
+14,Sweden,Stockholm,18-24,Non-binary,Swedish,25k-50k,"[""Design"", ""Sustainability"", ""Technology"", ""Coffee""]",2022-12-05,2025-04-01
+15,Singapore,Singapore,35-44,M,English,100k-150k,"[""Food"", ""Travel"", ""Technology"", ""Reading""]",2021-06-14,2025-03-29
+16,Mexico,Mexico City,25-34,F,Spanish,25k-50k,"[""Cooking"", ""Art"", ""Dance"", ""Travel""]",2023-02-18,2025-04-03
+17,USA,Chicago,55-64,M,English,75k-100k,"[""Jazz"", ""Fine Dining"", ""Photography"", ""Golf""]",2021-10-30,2025-03-28
+18,Netherlands,Amsterdam,25-34,F,Dutch,50k-75k,"[""Cycling"", ""Art"", ""Travel"", ""Sustainable Living""]",2022-04-15,2025-04-06
+19,China,Shanghai,35-44,M,Chinese,75k-100k,"[""Technology"", ""Tea"", ""Business"", ""Fitness""]",2023-01-29,2025-04-02
+20,Spain,Barcelona,18-24,F,Spanish,25k-50k,"[""Beach"", ""Fashion"", ""Photography"", ""Dancing""]",2022-08-05,2025-03-31
+21,Denmark,Copenhagen,35-44,Non-binary,Danish,75k-100k,"[""Design"", ""Cycling"", ""Hygge"", ""Sustainability""]",2022-01-12,2025-04-04
+22,Russia,Moscow,25-34,M,Russian,50k-75k,"[""Literature"", ""Chess"", ""Fitness"", ""Technology""]",2023-04-09,2025-04-01
+23,USA,Seattle,35-44,F,English,100k-150k,"[""Coffee"", ""Hiking"", ""Technology"", ""Reading""]",2021-05-22,2025-03-29
+24,UAE,Dubai,25-34,M,Arabic,150k+,"[""Luxury"", ""Travel"", ""Technology"", ""Fashion""]",2022-09-08,2025-04-05
+25,Ireland,Dublin,45-54,F,English,50k-75k,"[""Literature"", ""Music"", ""Cooking"", ""History""]",2021-12-18,2025-03-27
+26,USA,Miami,18-24,M,English,25k-50k,"[""Beach"", ""Fitness"", ""Music"", ""Nightlife""]",2023-06-01,2025-04-03
+27,Thailand,Bangkok,25-34,F,Thai,25k-50k,"[""Cooking"", ""Travel"", ""Photography"", ""Shopping""]",2022-03-14,2025-03-30
+28,New Zealand,Auckland,35-44,M,English,75k-100k,"[""Outdoor"", ""Rugby"", ""Wine"", ""Photography""]",2021-08-11,2025-04-02
+29,USA,Portland,25-34,Non-binary,English,50k-75k,"[""Sustainability"", ""Craft Beer"", ""Hiking"", ""Art""]",2022-11-25,2025-04-06
+30,Norway,Oslo,55-64,F,Norwegian,100k-150k,"[""Skiing"", ""Literature"", ""Nature"", ""Knitting""]",2021-04-20,2025-03-31
+31,Argentina,Buenos Aires,25-34,F,Spanish,25k-50k,"[""Tango"", ""Literature"", ""Wine"", ""Fashion""]",2022-06-14,2025-04-05
+32,USA,Boston,35-44,M,English,100k-150k,"[""History"", ""Sports"", ""Education"", ""Technology""]",2021-08-29,2025-03-28
+33,Israel,Tel Aviv,18-24,M,Hebrew,50k-75k,"[""Technology"", ""Beach"", ""Startups"", ""Fitness""]",2023-01-07,2025-04-04
+34,Malaysia,Kuala Lumpur,25-34,F,Malay,25k-50k,"[""Food"", ""Travel"", ""Fashion"", ""Photography""]",2022-05-12,2025-03-29
+35,USA,Los Angeles,25-34,Non-binary,English,75k-100k,"[""Film"", ""Yoga"", ""Vegan Cooking"", ""Music""]",2023-03-22,2025-04-01
+36,Portugal,Lisbon,45-54,M,Portuguese,50k-75k,"[""Surfing"", ""Wine"", ""History"", ""Sailing""]",2021-10-08,2025-03-31
+37,Greece,Athens,35-44,F,Greek,25k-50k,"[""History"", ""Mediterranean Cooking"", ""Art"", ""Literature""]",2022-08-17,2025-04-03
+38,USA,Denver,18-24,M,English,25k-50k,"[""Skiing"", ""Hiking"", ""Craft Beer"", ""Cannabis""]",2023-02-01,2025-04-06
+39,Switzerland,Zurich,35-44,F,German,150k+,"[""Hiking"", ""Luxury Watches"", ""Skiing"", ""Fine Dining""]",2022-09-20,2025-03-30
+40,Vietnam,Ho Chi Minh City,25-34,F,Vietnamese,25k-50k,"[""Street Food"", ""Technology"", ""Photography"", ""Travel""]",2021-12-05,2025-04-02
+41,Canada,Vancouver,35-44,M,English,75k-100k,"[""Outdoor"", ""Skiing"", ""Photography"", ""Craft Beer""]",2022-10-18,2025-03-27
+42,Finland,Helsinki,25-34,Non-binary,Finnish,50k-75k,"[""Design"", ""Sauna"", ""Coffee"", ""Winter Sports""]",2023-04-30,2025-04-05
+43,Egypt,Cairo,18-24,M,Arabic,25k-50k,"[""History"", ""Photography"", ""Technology"", ""Coffee""]",2022-06-22,2025-03-28
+44,USA,Nashville,35-44,F,English,50k-75k,"[""Country Music"", ""Cooking"", ""Hiking"", ""Crafts""]",2021-11-15,2025-04-01
+45,Austria,Vienna,45-54,M,German,75k-100k,"[""Classical Music"", ""Coffee"", ""History"", ""Fine Arts""]",2022-02-08,2025-04-04
+46,Colombia,Bogota,25-34,F,Spanish,25k-50k,"[""Coffee"", ""Dance"", ""Travel"", ""Photography""]",2023-03-17,2025-03-29
+47,USA,Philadelphia,35-44,M,English,75k-100k,"[""History"", ""Sports"", ""Craft Beer"", ""Food""]",2021-07-26,2025-04-06
+48,Poland,Warsaw,18-24,F,Polish,25k-50k,"[""Music"", ""History"", ""Fashion"", ""Photography""]",2022-05-03,2025-03-31
+49,Philippines,Manila,25-34,M,Filipino,50k-75k,"[""Gaming"", ""Basketball"", ""Technology"", ""Music""]",2022-12-14,2025-04-02
+50,USA,Washington DC,45-54,F,English,100k-150k,"[""Politics"", ""History"", ""Literature"", ""Wine""]",2021-09-30,2025-03-28
+51,South Africa,Cape Town,25-34,Non-binary,English,50k-75k,"[""Outdoor"", ""Wine"", ""Photography"", ""Surfing""]",2023-05-19,2025-04-04
+52,Turkey,Istanbul,35-44,M,Turkish,25k-50k,"[""History"", ""Coffee"", ""Photography"", ""Cooking""]",2022-01-28,2025-03-30
+53,USA,Minneapolis,18-24,F,English,25k-50k,"[""Music"", ""Art"", ""Cycling"", ""Craft Beer""]",2022-07-11,2025-04-03
+54,Belgium,Brussels,35-44,M,French,75k-100k,"[""Beer"", ""Chocolate"", ""Cycling"", ""Fine Dining""]",2021-10-24,2025-03-29
+55,Saudi Arabia,Riyadh,25-34,M,Arabic,150k+,"[""Technology"", ""Sports"", ""Travel"", ""Photography""]",2023-01-15,2025-04-01
+56,USA,Atlanta,35-44,F,English,50k-75k,"[""Hip Hop"", ""Soul Food"", ""Film"", ""Fitness""]",2022-04-27,2025-03-28
+57,Chile,Santiago,25-34,F,Spanish,50k-75k,"[""Wine"", ""Hiking"", ""Photography"", ""Literature""]",2021-08-16,2025-04-06
+58,USA,Dallas,45-54,M,English,100k-150k,"[""BBQ"", ""Football"", ""Business"", ""Golf""]",2022-11-09,2025-03-31
+59,Hungary,Budapest,18-24,F,Hungarian,25k-50k,"[""History"", ""Photography"", ""Thermal Baths"", ""Music""]",2023-06-24,2025-04-02
+60,Ukraine,Kyiv,25-34,M,Ukrainian,25k-50k,"[""Technology"", ""History"", ""Photography"", ""Cooking""]",2022-02-25,2025-03-27
+61,USA,Phoenix,55-64,F,English,75k-100k,"[""Desert Hiking"", ""Golf"", ""Gardening"", ""Reading""]",2021-12-03,2025-04-05
+62,Indonesia,Jakarta,25-34,M,Indonesian,50k-75k,"[""Street Food"", ""Photography"", ""Technology"", ""Music""]",2023-03-31,2025-03-29
+63,USA,Pittsburgh,35-44,Non-binary,English,50k-75k,"[""Sports"", ""Art"", ""Technology"", ""History""]",2022-07-28,2025-04-01
+64,Romania,Bucharest,18-24,F,Romanian,25k-50k,"[""Music"", ""History"", ""Photography"", ""Fashion""]",2021-05-17,2025-04-04
+65,USA,San Diego,25-34,M,English,75k-100k,"[""Surfing"", ""Craft Beer"", ""Fitness"", ""Technology""]",2023-02-09,2025-03-30
+66,Ireland,Cork,35-44,F,English,50k-75k,"[""Music"", ""Literature"", ""Cooking"", ""Hiking""]",2022-06-11,2025-04-03
+67,Morocco,Marrakech,25-34,M,Arabic,25k-50k,"[""Cooking"", ""Photography"", ""Crafts"", ""History""]",2021-11-26,2025-03-28
+68,USA,Honolulu,45-54,F,English,100k-150k,"[""Beach"", ""Surfing"", ""Cooking"", ""Photography""]",2022-09-15,2025-04-06
+69,Czech Republic,Prague,18-24,M,Czech,25k-50k,"[""Beer"", ""History"", ""Photography"", ""Music""]",2023-01-22,2025-03-31
+70,Mexico,Cancun,25-34,F,Spanish,50k-75k,"[""Beach"", ""Diving"", ""Photography"", ""Cooking""]",2022-04-08,2025-04-02
+71,USA,Detroit,35-44,M,English,50k-75k,"[""Automotive"", ""Music"", ""Sports"", ""Technology""]",2021-10-13,2025-03-29
+72,Kenya,Nairobi,25-34,F,Swahili,25k-50k,"[""Wildlife"", ""Photography"", ""Coffee"", ""Fashion""]",2023-05-07,2025-04-04
+73,USA,St. Louis,18-24,Non-binary,English,25k-50k,"[""Music"", ""Food"", ""Photography"", ""Gaming""]",2022-08-21,2025-03-30
+74,Peru,Lima,35-44,M,Spanish,50k-75k,"[""Cooking"", ""History"", ""Photography"", ""Hiking""]",2021-06-30,2025-04-03
+75,USA,New Orleans,45-54,F,English,75k-100k,"[""Jazz"", ""Cooking"", ""History"", ""Literature""]",2022-12-19,2025-03-28
+76,Croatia,Zagreb,25-34,M,Croatian,25k-50k,"[""Coastal Travel"", ""History"", ""Photography"", ""Wine""]",2023-04-15,2025-04-05
+77,USA,Kansas City,35-44,F,English,50k-75k,"[""BBQ"", ""Jazz"", ""Sports"", ""Gardening""]",2021-09-08,2025-03-31
+78,Nigeria,Lagos,18-24,M,English,25k-50k,"[""Music"", ""Technology"", ""Fashion"", ""Photography""]",2022-03-26,2025-04-01
+79,USA,Salt Lake City,25-34,F,English,75k-100k,"[""Skiing"", ""Hiking"", ""Outdoor"", ""Photography""]",2022-10-29,2025-03-27
+80,Taiwan,Taipei,35-44,M,Chinese,50k-75k,"[""Street Food"", ""Technology"", ""Photography"", ""Tea""]",2023-02-14,2025-04-06
+81,USA,Orlando,18-24,Non-binary,English,25k-50k,"[""Theme Parks"", ""Gaming"", ""Photography"", ""Cosplay""]",2021-07-03,2025-03-29
+82,New Zealand,Wellington,25-34,F,English,50k-75k,"[""Film"", ""Coffee"", ""Hiking"", ""Craft Beer""]",2022-12-10,2025-04-02
+83,USA,Cincinnati,45-54,M,English,75k-100k,"[""Sports"", ""Brewing"", ""History"", ""Cooking""]",2023-05-25,2025-03-28
+84,Brazil,Sao Paulo,35-44,F,Portuguese,50k-75k,"[""Coffee"", ""Fashion"", ""Music"", ""Art""]",2022-01-05,2025-04-04
+85,USA,Las Vegas,25-34,M,English,100k-150k,"[""Poker"", ""Nightlife"", ""Fine Dining"", ""Photography""]",2021-11-12,2025-03-30
+86,Sweden,Gothenburg,18-24,F,Swedish,25k-50k,"[""Music"", ""Sustainability"", ""Fashion"", ""Photography""]",2022-09-04,2025-04-03
+87,USA,Baltimore,35-44,M,English,50k-75k,"[""History"", ""Seafood"", ""Sports"", ""Photography""]",2023-03-19,2025-03-28
+88,Australia,Melbourne,25-34,Non-binary,English,75k-100k,"[""Coffee"", ""Art"", ""Music"", ""Cycling""]",2021-08-30,2025-04-05
+89,USA,Cleveland,45-54,F,English,50k-75k,"[""Rock Music"", ""Cooking"", ""Sports"", ""Gardening""]",2022-06-18,2025-03-31
+90,Iceland,Reykjavik,25-34,M,Icelandic,75k-100k,"[""Outdoor"", ""Photography"", ""Hiking"", ""Music""]",2023-01-31,2025-04-02
+91,USA,Indianapolis,18-24,F,English,25k-50k,"[""Motorsports"", ""Fitness"", ""Photography"", ""Reading""]",2022-04-22,2025-03-27
+92,Dubai,UAE,35-44,M,Arabic,150k+,"[""Luxury"", ""Technology"", ""Travel"", ""Fine Dining""]",2021-12-07,2025-04-04
+93,USA,Milwaukee,25-34,F,English,50k-75k,"[""Brewing"", ""Music"", ""Cooking"", ""Photography""]",2023-07-13,2025-03-29
+94,Spain,Madrid,35-44,M,Spanish,75k-100k,"[""Football"", ""Tapas"", ""Wine"", ""History""]",2022-02-03,2025-04-01
+95,USA,Tucson,55-64,Non-binary,English,50k-75k,"[""Desert Life"", ""Photography"", ""Reading"", ""Hiking""]",2021-10-19,2025-03-30
+96,Austria,Salzburg,25-34,F,German,50k-75k,"[""Classical Music"", ""Hiking"", ""History"", ""Skiing""]",2022-08-06,2025-04-06
+97,USA,Charlotte,35-44,M,English,75k-100k,"[""BBQ"", ""Sports"", ""Technology"", ""Craft Beer""]",2023-04-28,2025-03-31
+98,India,Bangalore,18-24,F,Hindi,25k-50k,"[""Technology"", ""Yoga"", ""Reading"", ""Photography""]",2022-07-09,2025-04-02
+99,USA,Sacramento,25-34,M,English,50k-75k,"[""Wine"", ""Outdoor"", ""Cycling"", ""Photography""]",2021-09-14,2025-03-28
+100,Japan,Osaka,35-44,F,Japanese,75k-100k,"[""Street Food"", ""Anime"", ""Fashion"", ""Technology""]",2022-03-05,2025-04-05

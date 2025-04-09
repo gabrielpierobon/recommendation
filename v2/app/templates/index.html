@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Recommendation Engine v2.0</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Advanced Recommendation Engine v2.0</h1>
+            <p>An intelligent system that combines multiple recommendation approaches with financial behavior insights</p>
+        </div>
+
+        <!-- Methodology Section -->
+        <div class="methodology">
+            <h2>Our Recommendation Methodologies</h2>
+            <div class="methods">
+                <div class="method">
+                    <h3><i class="fas fa-users"></i> Collaborative Filtering</h3>
+                    <p>Recommends items based on similar users' preferences and behaviors.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-tags"></i> Content-Based</h3>
+                    <p>Suggests items with similar attributes to those you've previously enjoyed.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-user-tag"></i> Demographic</h3>
+                    <p>Recommendations based on preferences of users with similar demographic profiles.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-sync-alt"></i> Hybrid Approach</h3>
+                    <p>Combines multiple recommendation techniques for more accurate results.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Financial Behavior</h3>
+                    <p>Provides recommendations with financial health insights based on your profile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Container -->
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="user-based">User-Based</div>
+                <div class="tab" data-tab="item-based">Item-Based</div>
+                <div class="tab" data-tab="hybrid">Hybrid</div>
+                <div class="tab" data-tab="content-based">Content-Based</div>
+                <div class="tab" data-tab="demographic">Demographic</div>
+            </div>
+
+            <!-- User-Based Tab Content -->
+            <div class="tab-content active" id="user-based">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-select">Select User:</label>
+                        <select id="user-select">
+                            <option value="">Select a user...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="num-recommendations">Number of Recommendations:</label>
+                        <select id="num-recommendations">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="details-panel" id="user-details">
+                    <h4>User Details</h4>
+                    <div id="user-info"></div>
+                </div>
+
+                <div class="financial-insights" id="financial-insights">
+                    <h4>Financial Insights</h4>
+                    <div class="financial-info" id="financial-info"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-financial-awareness">Financial Awareness Level:</label>
+                    <select id="user-financial-awareness">
+                        <option value="low">Low - Show all financial advice</option>
+                        <option value="moderate" selected>Moderate - Show targeted advice</option>
+                        <option value="high">High - Show minimal advice</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="get-user-recommendations">Get Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Item-Based Tab Content -->
+            <div class="tab-content" id="item-based">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="item-select">Select Item:</label>
+                        <select id="item-select">
+                            <option value="">Select an item...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-num-recommendations">Number of Recommendations:</label>
+                        <select id="item-num-recommendations">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="details-panel" id="item-details">
+                    <h4>Item Details</h4>
+                    <div id="item-info"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="item-financial-awareness">Financial Awareness Level:</label>
+                    <select id="item-financial-awareness">
+                        <option value="low">Low - Show all financial advice</option>
+                        <option value="moderate" selected>Moderate - Show targeted advice</option>
+                        <option value="high">High - Show minimal advice</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="get-item-recommendations">Get Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Hybrid Tab Content -->
+            <div class="tab-content" id="hybrid">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hybrid-user-select">Select User:</label>
+                        <select id="hybrid-user-select">
+                            <option value="">Select a user...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hybrid-num-recommendations">Number of Recommendations:</label>
+                        <select id="hybrid-num-recommendations">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="details-panel" id="hybrid-user-details">
+                    <h4>User Details</h4>
+                    <div id="hybrid-user-info"></div>
+                </div>
+
+                <div class="financial-insights" id="hybrid-financial-insights">
+                    <h4>Financial Insights</h4>
+                    <div class="financial-info" id="hybrid-financial-info"></div>
+                </div>
+
+                <div class="form-group">
+                    <h4>Recommendation Weights</h4>
+                    <div class="slider-container">
+                        <label>Collaborative Filtering <span class="weight-value" id="collab-weight-value">0.4</span></label>
+                        <input type="range" id="collab-weight" min="0" max="1" step="0.1" value="0.4">
+                    </div>
+                    <div class="slider-container">
+                        <label>Content-Based <span class="weight-value" id="content-weight-value">0.3</span></label>
+                        <input type="range" id="content-weight" min="0" max="1" step="0.1" value="0.3">
+                    </div>
+                    <div class="slider-container">
+                        <label>Demographic <span class="weight-value" id="demographic-weight-value">0.3</span></label>
+                        <input type="range" id="demographic-weight" min="0" max="1" step="0.1" value="0.3">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hybrid-financial-awareness">Financial Awareness Level:</label>
+                    <select id="hybrid-financial-awareness">
+                        <option value="low">Low - Show all financial advice</option>
+                        <option value="moderate" selected>Moderate - Show targeted advice</option>
+                        <option value="high">High - Show minimal advice</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="get-hybrid-recommendations">Get Hybrid Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Content-Based Tab Content -->
+            <div class="tab-content" id="content-based">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="content-item-select">Select Item:</label>
+                        <select id="content-item-select">
+                            <option value="">Select an item...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content-attributes">Select Attributes to Consider:</label>
+                        <div class="checkbox-group" id="content-attributes">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="attr-category" checked>
+                                <label for="attr-category">Category</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="attr-brand" checked>
+                                <label for="attr-brand">Brand</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="attr-tags" checked>
+                                <label for="attr-tags">Tags</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="attr-price">
+                                <label for="attr-price">Price Range</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-panel" id="content-item-details">
+                    <h4>Item Details</h4>
+                    <div id="content-item-info"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content-financial-awareness">Financial Awareness Level:</label>
+                    <select id="content-financial-awareness">
+                        <option value="low">Low - Show all financial advice</option>
+                        <option value="moderate" selected>Moderate - Show targeted advice</option>
+                        <option value="high">High - Show minimal advice</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="get-content-recommendations">Get Content-Based Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Demographic Tab Content -->
+            <div class="tab-content" id="demographic">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="demographic-user-select">Select User:</label>
+                        <select id="demographic-user-select">
+                            <option value="">Select a user...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="demographic-factors">Select Demographic Factors:</label>
+                        <div class="checkbox-group" id="demographic-factors">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="factor-age" checked>
+                                <label for="factor-age">Age Group</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="factor-gender" checked>
+                                <label for="factor-gender">Gender</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="factor-location">
+                                <label for="factor-location">Location</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="factor-interests" checked>
+                                <label for="factor-interests">Interests</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="factor-income">
+                                <label for="factor-income">Income</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-panel" id="demographic-user-details">
+                    <h4>User Details</h4>
+                    <div id="demographic-user-info"></div>
+                </div>
+
+                <div class="financial-insights" id="demographic-financial-insights">
+                    <h4>Financial Insights</h4>
+                    <div class="financial-info" id="demographic-financial-info"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="financial-awareness">Financial Awareness Level:</label>
+                    <select id="financial-awareness">
+                        <option value="low">Low - Show all financial advice</option>
+                        <option value="moderate" selected>Moderate - Show targeted advice</option>
+                        <option value="high">High - Show minimal advice</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button id="get-demographic-recommendations">Get Demographic Recommendations</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <h3 class="section-title">Recommendations</h3>
+        <div class="results-container" id="recommendations">
+            <div class="no-results">Select a recommendation method and click the corresponding button to see recommendations</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Advanced Recommendation Engine v2.0 | Developed with AI-powered intelligent algorithms</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 
