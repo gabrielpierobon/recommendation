@@ -200,6 +200,14 @@ select, input {
     background-color: var(--primary-color);
     color: white;
     position: relative;
+    padding-top: 35px;
+}
+
+.item-card .item-header h4 {
+    margin: 0;
+    padding-right: 70px;
+    line-height: 1.4;
+    word-wrap: break-word;
 }
 
 .item-card .item-body {
@@ -252,13 +260,14 @@ select, input {
 .item-card .category-badge {
     position: absolute;
     top: 10px;
-    left: 10px;
+    left: 15px;
     color: white;
     padding: 3px 8px;
     border-radius: 15px;
     font-size: 0.7rem;
     font-weight: 600;
     background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
 /* Category badge colors */
