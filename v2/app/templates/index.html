@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frasers Group Recommendation Engine - V1</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Frasers Group Recommendation Engine Demo (V1)</h1>
+            <p>Phase 2 Implementation: Collaborative Filtering</p>
+        </header>
+
+        <div class="recommendation-container">
+            <div class="tab-container">
+                <div class="tabs">
+                    <div class="tab active" data-tab="user-based">User-Based Recommendations</div>
+                    <div class="tab" data-tab="item-based">Item-Based Recommendations</div>
+                    <div class="tab" data-tab="popular">Popular Items</div>
+                </div>
+
+                <!-- User-based recommendation tab -->
+                <div class="tab-content active" id="user-based">
+                    <div class="input-container">
+                        <label for="user-selector">Select a User:</label>
+                        <select id="user-selector">
+                            <option value="">Loading users...</option>
+                        </select>
+                        <button id="get-user-recommendations" class="btn">Get Recommendations</button>
+                    </div>
+                    <div id="user-details" class="details-panel"></div>
+                    <div class="results" id="user-recommendations">
+                        <h3>Recommended Items</h3>
+                        <div class="recommendation-results">
+                            <p class="placeholder">Select a user to see recommendations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item-based recommendation tab -->
+                <div class="tab-content" id="item-based">
+                    <div class="input-container">
+                        <label for="item-selector">Select an Item:</label>
+                        <select id="item-selector">
+                            <option value="">Loading items...</option>
+                        </select>
+                        <button id="get-item-recommendations" class="btn">Find Similar Items</button>
+                    </div>
+                    <div id="item-details" class="details-panel"></div>
+                    <div class="results" id="item-recommendations">
+                        <h3>Similar Items</h3>
+                        <div class="recommendation-results">
+                            <p class="placeholder">Select an item to see similar items</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular items tab -->
+                <div class="tab-content" id="popular">
+                    <div class="input-container">
+                        <label for="popular-count">Number of items:</label>
+                        <input type="number" id="popular-count" min="1" max="20" value="5">
+                        <button id="get-popular-items" class="btn">Get Popular Items</button>
+                    </div>
+                    <div class="results" id="popular-recommendations">
+                        <h3>Most Popular Items</h3>
+                        <div class="recommendation-results">
+                            <p class="placeholder">Click the button to see popular items</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="methodology">
+            <h2>How it Works</h2>
+            <div class="methods">
+                <div class="method">
+                    <h3><i class="fas fa-users"></i> User-Based Collaborative Filtering</h3>
+                    <p>Recommends items based on preferences of similar users. The system identifies users with similar taste patterns and recommends items they enjoyed but you haven't tried yet.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-th"></i> Item-Based Collaborative Filtering</h3>
+                    <p>Recommends items similar to ones you've already liked. The system analyzes relationships between items based on user ratings to find items that are frequently liked together.</p>
+                </div>
+                <div class="method">
+                    <h3><i class="fas fa-chart-line"></i> Popularity-Based Recommendations</h3>
+                    <p>Recommends the most popular items based on overall ratings. This approach is particularly useful for new users with limited history (cold start problem).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="frasers-brands">
+            <h2>Featured Frasers Group Brands</h2>
+            <div class="brands-container">
+                <div class="brand">
+                    <i class="fas fa-tshirt"></i>
+                    <h4>Sports Direct</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h4>House of Fraser</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-gem"></i>
+                    <h4>Flannels</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-bicycle"></i>
+                    <h4>Evans Cycles</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-gamepad"></i>
+                    <h4>GAME</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-tshirt"></i>
+                    <h4>Jack Wills</h4>
+                </div>
+                <div class="brand">
+                    <i class="fas fa-tag"></i>
+                    <h4>USC</h4>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Frasers Group Recommendation Engine Demo V1 | Phase 2 Implementation</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 
