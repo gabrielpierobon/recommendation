@@ -274,7 +274,7 @@ function displayRecommendations(recommendations, containerId) {
         itemCard.className = 'item-card';
         
         // Format the score as percentage for better readability
-        const scorePercent = Math.round((item.score / 5) * 100);
+        const scorePercent = Math.min(100, Math.round((item.score / 5) * 100));
         
         // Create category badge class based on main category
         const categoryClass = item.main_category.toLowerCase().replace(/\s+/g, '-');

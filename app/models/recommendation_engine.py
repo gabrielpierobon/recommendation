@@ -5,6 +5,7 @@ import os
 import json
 from collections import defaultdict
 import random
+from datetime import datetime
 
 class RecommendationEngine:
     """
@@ -17,20 +18,113 @@ class RecommendationEngine:
     """
     
     def __init__(self):
-        """Initialize recommendation engine with data from Excel files"""
+        """Initialize recommendation engine with data from CSV files"""
         # Look for data files in the workspace root's data directory
         data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
         
-        # Define paths to Excel files
-        ratings_file = os.path.join(data_dir, 'ratings.xlsx')
-        items_file = os.path.join(data_dir, 'items.xlsx')
-        users_file = os.path.join(data_dir, 'users.xlsx')
+        # Define paths to CSV files
+        ratings_file = os.path.join(data_dir, 'ratings.csv')
+        items_file = os.path.join(data_dir, 'items.csv')
+        users_file = os.path.join(data_dir, 'users.csv')
         
-        # Load data from Excel files
+        # Load data from CSV files with proper data types
         print(f"Loading data from {data_dir}")
-        self.ratings_df = pd.read_excel(ratings_file)
-        self.items_df = pd.read_excel(items_file)
-        self.users_df = pd.read_excel(users_file)
+        
+        # Manually read and parse CSV files to avoid header issues
+        try:
+            # === RATINGS DATA ===
+            with open(os.path.join(data_dir, 'ratings.csv'), 'r', encoding='utf-8') as f:
+                # Print first 10 lines for debugging
+                print("First 10 lines of ratings.csv:")
+                lines = []
+                for i in range(10):
+                    line = f.readline().strip()
+                    print(f"Line {i+1}: {line}")
+                    lines.append(line)
+                
+                # Reset file pointer
+                f.seek(0)
+                
+                # Process file properly
+                header = f.readline().strip()  # Skip header
+                print(f"Header: {header}")
+                
+                ratings_data = []
+                line_num = 1
+                for line in f:
+                    line_num += 1
+                    line = line.strip()
+                    
+                    # Skip duplicate header lines
+                    if line == header or line == "user_id,item_id,rating,timestamp":
+                        print(f"Skipping duplicate header at line {line_num}")
+                        continue
+                        
+                    try:
+                        parts = line.split(',')
+                        if len(parts) >= 4:
+                            user_id, item_id, rating = parts[0], parts[1], parts[2]
+                            timestamp = ','.join(parts[3:])  # Rejoin timestamp if it has commas
+                            ratings_data.append({
+                                'user_id': int(user_id),
+                                'item_id': int(item_id),
+                                'rating': float(rating),
+                                'timestamp': pd.to_datetime(timestamp)
+                            })
+                        else:
+                            print(f"Warning: Line {line_num} has unexpected format: {line}")
+                    except ValueError as e:
+                        print(f"Error parsing line {line_num}: {line}")
+                        print(f"Error details: {e}")
+                        # Skip this line and continue
+            
+            # Create DataFrame
+            self.ratings_df = pd.DataFrame(ratings_data)
+            print(f"Ratings data loaded: {len(self.ratings_df)} entries")
+            
+            # === ITEMS DATA ===
+            # Read just the header first to check structure
+            with open(os.path.join(data_dir, 'items.csv'), 'r', encoding='utf-8') as f:
+                header = f.readline().strip()
+                print(f"Items header: {header}")
+            
+            self.items_df = pd.read_csv(
+                os.path.join(data_dir, 'items.csv'),
+                encoding='utf-8'
+            )
+            print(f"Items data loaded: {len(self.items_df)} entries")
+            
+            # === USERS DATA ===
+            # Read just the header first to check structure
+            with open(os.path.join(data_dir, 'users.csv'), 'r', encoding='utf-8') as f:
+                header = f.readline().strip()
+                print(f"Users header: {header}")
+                
+            self.users_df = pd.read_csv(
+                os.path.join(data_dir, 'users.csv'),
+                encoding='utf-8'
+            )
+            print(f"Users data loaded: {len(self.users_df)} entries")
+            
+            print("All CSV files loaded successfully!")
+        except Exception as e:
+            print(f"Error loading CSV files: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
+        
+        # Convert string representation of lists to actual lists
+        self.items_df['tags'] = self.items_df['tags'].apply(lambda x: eval(x) if pd.notna(x) else [])
+        self.items_df['price'] = self.items_df['price'].astype(float)
+        self.items_df['average_rating'] = self.items_df['average_rating'].astype(float)
+        self.items_df['num_ratings'] = self.items_df['num_ratings'].astype(int)
+        self.items_df['stock_level'] = self.items_df['stock_level'].astype(int)
+        self.items_df['release_date'] = pd.to_datetime(self.items_df['release_date'])
+        
+        # Convert string representation of lists to actual lists
+        self.users_df['interests'] = self.users_df['interests'].apply(lambda x: eval(x) if pd.notna(x) else [])
+        self.users_df['registration_date'] = pd.to_datetime(self.users_df['registration_date'])
+        self.users_df['last_active'] = pd.to_datetime(self.users_df['last_active'])
         
         # Create user-item matrix for collaborative filtering
         self.user_item_matrix = self._create_user_item_matrix()
@@ -225,7 +319,7 @@ class RecommendationEngine:
             'average_rating': float(item['average_rating'].values[0]),
             'num_ratings': int(item['num_ratings'].values[0]),
             'stock_level': int(item['stock_level'].values[0]),
-            'release_date': item['release_date'].values[0],
+            'release_date': pd.Timestamp(item['release_date'].values[0]).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
             'description': item['description'].values[0]
         }
         
@@ -252,7 +346,7 @@ class RecommendationEngine:
                 'average_rating': float(item['average_rating']),
                 'num_ratings': int(item['num_ratings']),
                 'stock_level': int(item['stock_level']),
-                'release_date': item['release_date'],
+                'release_date': pd.Timestamp(item['release_date']).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
                 'description': item['description']
             }
             
@@ -277,7 +371,7 @@ class RecommendationEngine:
                 'language': user['language'],
                 'income_bracket': user['income_bracket'],
                 'interests': user['interests'],
-                'registration_date': user['registration_date'],
-                'last_active': user['last_active']
+                'registration_date': pd.Timestamp(user['registration_date']).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
+                'last_active': pd.Timestamp(user['last_active']).strftime('%Y-%m-%d')  # Convert numpy.datetime64 to string
             })
         return users 
