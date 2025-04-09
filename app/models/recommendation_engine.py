@@ -4,6 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 import json
 from collections import defaultdict
+import random
+from datetime import datetime
 
 class RecommendationEngine:
     """
@@ -16,13 +18,113 @@ class RecommendationEngine:
     """
     
     def __init__(self):
-        """Initialize recommendation engine with sample data"""
-        data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+        """Initialize recommendation engine with data from CSV files"""
+        # Look for data files in the workspace root's data directory
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
         
-        # Load or generate sample data
-        self.ratings_df = self._load_or_generate_ratings(os.path.join(data_dir, 'ratings.csv'))
-        self.items_df = self._load_or_generate_items(os.path.join(data_dir, 'items.csv'))
-        self.users_df = self._load_or_generate_users(os.path.join(data_dir, 'users.csv'))
+        # Define paths to CSV files
+        ratings_file = os.path.join(data_dir, 'ratings.csv')
+        items_file = os.path.join(data_dir, 'items.csv')
+        users_file = os.path.join(data_dir, 'users.csv')
+        
+        # Load data from CSV files with proper data types
+        print(f"Loading data from {data_dir}")
+        
+        # Manually read and parse CSV files to avoid header issues
+        try:
+            # === RATINGS DATA ===
+            with open(os.path.join(data_dir, 'ratings.csv'), 'r', encoding='utf-8') as f:
+                # Print first 10 lines for debugging
+                print("First 10 lines of ratings.csv:")
+                lines = []
+                for i in range(10):
+                    line = f.readline().strip()
+                    print(f"Line {i+1}: {line}")
+                    lines.append(line)
+                
+                # Reset file pointer
+                f.seek(0)
+                
+                # Process file properly
+                header = f.readline().strip()  # Skip header
+                print(f"Header: {header}")
+                
+                ratings_data = []
+                line_num = 1
+                for line in f:
+                    line_num += 1
+                    line = line.strip()
+                    
+                    # Skip duplicate header lines
+                    if line == header or line == "user_id,item_id,rating,timestamp":
+                        print(f"Skipping duplicate header at line {line_num}")
+                        continue
+                        
+                    try:
+                        parts = line.split(',')
+                        if len(parts) >= 4:
+                            user_id, item_id, rating = parts[0], parts[1], parts[2]
+                            timestamp = ','.join(parts[3:])  # Rejoin timestamp if it has commas
+                            ratings_data.append({
+                                'user_id': int(user_id),
+                                'item_id': int(item_id),
+                                'rating': float(rating),
+                                'timestamp': pd.to_datetime(timestamp)
+                            })
+                        else:
+                            print(f"Warning: Line {line_num} has unexpected format: {line}")
+                    except ValueError as e:
+                        print(f"Error parsing line {line_num}: {line}")
+                        print(f"Error details: {e}")
+                        # Skip this line and continue
+            
+            # Create DataFrame
+            self.ratings_df = pd.DataFrame(ratings_data)
+            print(f"Ratings data loaded: {len(self.ratings_df)} entries")
+            
+            # === ITEMS DATA ===
+            # Read just the header first to check structure
+            with open(os.path.join(data_dir, 'items.csv'), 'r', encoding='utf-8') as f:
+                header = f.readline().strip()
+                print(f"Items header: {header}")
+            
+            self.items_df = pd.read_csv(
+                os.path.join(data_dir, 'items.csv'),
+                encoding='utf-8'
+            )
+            print(f"Items data loaded: {len(self.items_df)} entries")
+            
+            # === USERS DATA ===
+            # Read just the header first to check structure
+            with open(os.path.join(data_dir, 'users.csv'), 'r', encoding='utf-8') as f:
+                header = f.readline().strip()
+                print(f"Users header: {header}")
+                
+            self.users_df = pd.read_csv(
+                os.path.join(data_dir, 'users.csv'),
+                encoding='utf-8'
+            )
+            print(f"Users data loaded: {len(self.users_df)} entries")
+            
+            print("All CSV files loaded successfully!")
+        except Exception as e:
+            print(f"Error loading CSV files: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
+        
+        # Convert string representation of lists to actual lists
+        self.items_df['tags'] = self.items_df['tags'].apply(lambda x: eval(x) if pd.notna(x) else [])
+        self.items_df['price'] = self.items_df['price'].astype(float)
+        self.items_df['average_rating'] = self.items_df['average_rating'].astype(float)
+        self.items_df['num_ratings'] = self.items_df['num_ratings'].astype(int)
+        self.items_df['stock_level'] = self.items_df['stock_level'].astype(int)
+        self.items_df['release_date'] = pd.to_datetime(self.items_df['release_date'])
+        
+        # Convert string representation of lists to actual lists
+        self.users_df['interests'] = self.users_df['interests'].apply(lambda x: eval(x) if pd.notna(x) else [])
+        self.users_df['registration_date'] = pd.to_datetime(self.users_df['registration_date'])
+        self.users_df['last_active'] = pd.to_datetime(self.users_df['last_active'])
         
         # Create user-item matrix for collaborative filtering
         self.user_item_matrix = self._create_user_item_matrix()
@@ -35,95 +137,11 @@ class RecommendationEngine:
         
         # Pre-compute popular items
         self.popular_items = self._compute_popular_items()
-    
-    def _load_or_generate_ratings(self, file_path):
-        """Load ratings data or generate if not exists"""
-        if os.path.exists(file_path):
-            return pd.read_csv(file_path)
         
-        # Generate sample ratings
-        np.random.seed(42)
-        num_users = 100
-        num_items = 50
-        sparsity = 0.1  # 10% of possible ratings are generated
-        
-        # Generate random ratings
-        user_ids = np.random.randint(1, num_users+1, size=int(num_users * num_items * sparsity))
-        item_ids = np.random.randint(1, num_items+1, size=int(num_users * num_items * sparsity))
-        ratings = np.random.randint(1, 6, size=int(num_users * num_items * sparsity))
-        
-        # Create dataframe
-        ratings_df = pd.DataFrame({
-            'user_id': user_ids,
-            'item_id': item_ids,
-            'rating': ratings
-        })
-        
-        # Remove duplicates (user-item pairs should be unique)
-        ratings_df = ratings_df.drop_duplicates(subset=['user_id', 'item_id'])
-        
-        # Save to csv
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        ratings_df.to_csv(file_path, index=False)
-        
-        return ratings_df
-    
-    def _load_or_generate_items(self, file_path):
-        """Load items data or generate if not exists"""
-        if os.path.exists(file_path):
-            return pd.read_csv(file_path)
-        
-        # Sample retail categories
-        categories = ['Electronics', 'Fashion', 'Home', 'Sports', 'Beauty']
-        brands = ['Brand A', 'Brand B', 'Brand C', 'Brand D', 'Brand E']
-        
-        # Generate sample items
-        item_data = []
-        for i in range(1, 51):
-            category = categories[i % len(categories)]
-            brand = brands[i % len(brands)]
-            price = round(np.random.uniform(10, 500), 2)
-            item_data.append({
-                'item_id': i,
-                'name': f'{category} Item {i}',
-                'category': category,
-                'brand': brand,
-                'price': price,
-                'description': f'This is a sample {category.lower()} item from {brand}.'
-            })
-        
-        items_df = pd.DataFrame(item_data)
-        
-        # Save to csv
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        items_df.to_csv(file_path, index=False)
-        
-        return items_df
-    
-    def _load_or_generate_users(self, file_path):
-        """Load users data or generate if not exists"""
-        if os.path.exists(file_path):
-            return pd.read_csv(file_path)
-        
-        # Generate sample users
-        user_data = []
-        for i in range(1, 101):
-            age = np.random.randint(18, 70)
-            gender = 'M' if np.random.random() < 0.5 else 'F'
-            user_data.append({
-                'user_id': i,
-                'name': f'User {i}',
-                'age': age,
-                'gender': gender
-            })
-        
-        users_df = pd.DataFrame(user_data)
-        
-        # Save to csv
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        users_df.to_csv(file_path, index=False)
-        
-        return users_df
+        print("Data loaded successfully!")
+        print(f"Users: {len(self.users_df)}")
+        print(f"Items: {len(self.items_df)}")
+        print(f"Ratings: {len(self.ratings_df)}")
     
     def _create_user_item_matrix(self):
         """Create a user-item matrix from ratings dataframe"""
@@ -215,8 +233,8 @@ class RecommendationEngine:
         # Convert recommendations to list and sort
         recommendations = [
             {
-                'item_id': int(item_id),
-                'score': float(score),
+                'item_id': int(item_id),  # Convert numpy.int64 to Python int
+                'score': float(score),    # Convert numpy.float64 to Python float
                 **self.get_item_details(item_id)
             }
             for item_id, score in sorted(recommendations.items(), key=lambda x: x[1], reverse=True)
@@ -244,8 +262,8 @@ class RecommendationEngine:
         # Create recommendations list
         recommendations = [
             {
-                'item_id': int(similar_item),
-                'score': float(item_similarities[similar_item]),
+                'item_id': int(similar_item),  # Convert numpy.int64 to Python int
+                'score': float(item_similarities[similar_item]),  # Convert numpy.float64 to Python float
                 **self.get_item_details(similar_item)
             }
             for similar_item in similar_items
@@ -262,9 +280,9 @@ class RecommendationEngine:
         # Create recommendations list
         recommendations = [
             {
-                'item_id': int(item_id),
-                'score': float(row['mean_rating']),
-                'popularity': int(row['rating_count']),
+                'item_id': int(item_id),  # Convert numpy.int64 to Python int
+                'score': float(row['mean_rating']),  # Convert numpy.float64 to Python float
+                'popularity': int(row['rating_count']),  # Convert numpy.int64 to Python int
                 **self.get_item_details(item_id)
             }
             for item_id, row in popular_items.iterrows()
@@ -274,48 +292,86 @@ class RecommendationEngine:
     
     def get_item_details(self, item_id):
         """Get details for a specific item"""
-        item_id = int(item_id)
+        item_id = int(item_id)  # Convert to Python int if needed
         item = self.items_df[self.items_df['item_id'] == item_id]
         
         if len(item) == 0:
             return {
                 'name': f'Unknown Item {item_id}',
-                'category': 'Unknown',
+                'main_category': 'Unknown',
+                'subcategory': 'Unknown',
                 'brand': 'Unknown',
                 'price': 0.0,
+                'tags': [],
+                'condition': 'Unknown',
+                'stock_level': 0,
                 'description': 'No description available'
             }
         
-        return {
+        details = {
             'name': item['name'].values[0],
-            'category': item['category'].values[0],
+            'main_category': item['main_category'].values[0],
+            'subcategory': item['subcategory'].values[0],
             'brand': item['brand'].values[0],
+            'tags': item['tags'].values[0],
             'price': float(item['price'].values[0]),
+            'condition': item['condition'].values[0],
+            'average_rating': float(item['average_rating'].values[0]),
+            'num_ratings': int(item['num_ratings'].values[0]),
+            'stock_level': int(item['stock_level'].values[0]),
+            'release_date': pd.Timestamp(item['release_date'].values[0]).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
             'description': item['description'].values[0]
         }
+        
+        # Add color and size for fashion/sports items
+        if item['main_category'].values[0] in ['Fashion', 'Sports']:
+            details['color'] = item['color'].values[0]
+            details['size'] = item['size'].values[0]
+        
+        return details
     
     def get_all_items(self):
         """Get all items with their details"""
         items = []
         for _, item in self.items_df.iterrows():
-            items.append({
+            item_details = {
                 'item_id': int(item['item_id']),
                 'name': item['name'],
-                'category': item['category'],
+                'main_category': item['main_category'],
+                'subcategory': item['subcategory'],
                 'brand': item['brand'],
+                'tags': item['tags'],
                 'price': float(item['price']),
+                'condition': item['condition'],
+                'average_rating': float(item['average_rating']),
+                'num_ratings': int(item['num_ratings']),
+                'stock_level': int(item['stock_level']),
+                'release_date': pd.Timestamp(item['release_date']).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
                 'description': item['description']
-            })
+            }
+            
+            # Add color and size for fashion/sports items
+            if item['main_category'] in ['Fashion', 'Sports']:
+                item_details['color'] = item['color']
+                item_details['size'] = item['size']
+            
+            items.append(item_details)
         return items
     
     def get_all_users(self):
-        """Get all users"""
+        """Get all users with their details"""
         users = []
         for _, user in self.users_df.iterrows():
             users.append({
                 'user_id': int(user['user_id']),
-                'name': user['name'],
-                'age': int(user['age']),
-                'gender': user['gender']
+                'country': user['country'],
+                'city': user['city'],
+                'age_group': user['age_group'],
+                'gender': user['gender'],
+                'language': user['language'],
+                'income_bracket': user['income_bracket'],
+                'interests': user['interests'],
+                'registration_date': pd.Timestamp(user['registration_date']).strftime('%Y-%m-%d'),  # Convert numpy.datetime64 to string
+                'last_active': pd.Timestamp(user['last_active']).strftime('%Y-%m-%d')  # Convert numpy.datetime64 to string
             })
         return users 
