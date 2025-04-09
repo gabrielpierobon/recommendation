@@ -204,48 +204,80 @@ class RecommendationEngine:
         if len(item) == 0:
             return {
                 'name': f'Unknown Item {item_id}',
-                'category': 'Unknown',
+                'main_category': 'Unknown',
+                'subcategory': 'Unknown',
                 'brand': 'Unknown',
                 'price': 0.0,
-                'release_date': None
+                'tags': [],
+                'condition': 'Unknown',
+                'stock_level': 0,
+                'description': 'No description available'
             }
         
-        return {
+        details = {
             'name': item['name'].values[0],
-            'category': item['category'].values[0],
+            'main_category': item['main_category'].values[0],
+            'subcategory': item['subcategory'].values[0],
             'brand': item['brand'].values[0],
-            'price': float(item['price'].values[0]),  # Convert numpy.float64 to Python float
-            'release_date': item['release_date'].values[0] if 'release_date' in item.columns else None
+            'tags': item['tags'].values[0],
+            'price': float(item['price'].values[0]),
+            'condition': item['condition'].values[0],
+            'average_rating': float(item['average_rating'].values[0]),
+            'num_ratings': int(item['num_ratings'].values[0]),
+            'stock_level': int(item['stock_level'].values[0]),
+            'release_date': item['release_date'].values[0],
+            'description': item['description'].values[0]
         }
+        
+        # Add color and size for fashion/sports items
+        if item['main_category'].values[0] in ['Fashion', 'Sports']:
+            details['color'] = item['color'].values[0]
+            details['size'] = item['size'].values[0]
+        
+        return details
     
     def get_all_items(self):
         """Get all items with their details"""
         items = []
         for _, item in self.items_df.iterrows():
-            items.append({
-                'item_id': int(item['item_id']),  # Convert numpy.int64 to Python int
+            item_details = {
+                'item_id': int(item['item_id']),
                 'name': item['name'],
-                'category': item['category'],
+                'main_category': item['main_category'],
+                'subcategory': item['subcategory'],
                 'brand': item['brand'],
-                'price': float(item['price']),  # Convert numpy.float64 to Python float
-                'release_date': item['release_date'] if 'release_date' in self.items_df.columns else None
-            })
+                'tags': item['tags'],
+                'price': float(item['price']),
+                'condition': item['condition'],
+                'average_rating': float(item['average_rating']),
+                'num_ratings': int(item['num_ratings']),
+                'stock_level': int(item['stock_level']),
+                'release_date': item['release_date'],
+                'description': item['description']
+            }
+            
+            # Add color and size for fashion/sports items
+            if item['main_category'] in ['Fashion', 'Sports']:
+                item_details['color'] = item['color']
+                item_details['size'] = item['size']
+            
+            items.append(item_details)
         return items
     
     def get_all_users(self):
-        """Get all users"""
+        """Get all users with their details"""
         users = []
         for _, user in self.users_df.iterrows():
-            user_data = {
-                'user_id': int(user['user_id']),  # Convert numpy.int64 to Python int
+            users.append({
+                'user_id': int(user['user_id']),
                 'country': user['country'],
+                'city': user['city'],
                 'age_group': user['age_group'],
-                'gender': user['gender']
-            }
-            
-            # Add registration_date if it exists
-            if 'registration_d' in self.users_df.columns:
-                user_data['registration_date'] = user['registration_d']
-            
-            users.append(user_data)
+                'gender': user['gender'],
+                'language': user['language'],
+                'income_bracket': user['income_bracket'],
+                'interests': user['interests'],
+                'registration_date': user['registration_date'],
+                'last_active': user['last_active']
+            })
         return users 

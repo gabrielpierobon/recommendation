@@ -31,6 +31,7 @@ function loadUsers() {
     fetch('/users')
         .then(response => response.json())
         .then(users => {
+            console.log('Loaded users:', users);
             const userSelector = document.getElementById('user-selector');
             userSelector.innerHTML = ''; // Clear existing options
             
@@ -44,9 +45,8 @@ function loadUsers() {
             users.forEach(user => {
                 const option = document.createElement('option');
                 option.value = user.user_id;
-                option.textContent = `${user.name} (${user.age}, ${user.gender}) - ${user.city}`;
-                option.setAttribute('data-interests', user.interests);
-                option.setAttribute('data-spending', user.spending_profile);
+                option.textContent = `User ${user.user_id} (${user.age_group}, ${user.gender}) - ${user.city}, ${user.country}`;
+                option.setAttribute('data-user', JSON.stringify(user));
                 userSelector.appendChild(option);
             });
 
@@ -63,13 +63,18 @@ function updateUserDetails() {
     
     if (userSelector.value && userDetailsElement) {
         const selectedOption = userSelector.options[userSelector.selectedIndex];
-        const interests = selectedOption.getAttribute('data-interests');
-        const spending = selectedOption.getAttribute('data-spending');
-        const spendingStars = '★'.repeat(parseInt(spending)) + '☆'.repeat(5 - parseInt(spending));
+        const userData = JSON.parse(selectedOption.getAttribute('data-user'));
         
         userDetailsElement.innerHTML = `
-            <div class="user-interests"><strong>Interests:</strong> ${interests}</div>
-            <div class="user-spending"><strong>Spending Profile:</strong> ${spendingStars}</div>
+            <div class="user-info">
+                <p><strong>Location:</strong> ${userData.city}, ${userData.country}</p>
+                <p><strong>Demographics:</strong> ${userData.age_group}, ${userData.gender}</p>
+                <p><strong>Language:</strong> ${userData.language}</p>
+                <p><strong>Income:</strong> ${userData.income_bracket}</p>
+                <p><strong>Interests:</strong> ${userData.interests.join(', ')}</p>
+                <p><strong>Member since:</strong> ${new Date(userData.registration_date).toLocaleDateString()}</p>
+                <p><strong>Last active:</strong> ${new Date(userData.last_active).toLocaleDateString()}</p>
+            </div>
         `;
         userDetailsElement.style.display = 'block';
     } else if (userDetailsElement) {
@@ -82,6 +87,7 @@ function loadItems() {
     fetch('/items')
         .then(response => response.json())
         .then(items => {
+            console.log('Loaded items:', items);
             const itemSelector = document.getElementById('item-selector');
             itemSelector.innerHTML = ''; // Clear existing options
             
@@ -91,13 +97,13 @@ function loadItems() {
             placeholderOption.textContent = 'Select an item...';
             itemSelector.appendChild(placeholderOption);
             
-            // Group items by category
+            // Group items by main category
             const categorizedItems = {};
             items.forEach(item => {
-                if (!categorizedItems[item.category]) {
-                    categorizedItems[item.category] = [];
+                if (!categorizedItems[item.main_category]) {
+                    categorizedItems[item.main_category] = [];
                 }
-                categorizedItems[item.category].push(item);
+                categorizedItems[item.main_category].push(item);
             });
             
             // Add items by category as option groups
@@ -108,7 +114,8 @@ function loadItems() {
                 categoryItems.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item.item_id;
-                    option.textContent = `${item.name} (${item.brand}, £${item.price.toFixed(2)})`;
+                    option.textContent = `${item.name} (${item.brand})`;
+                    option.setAttribute('data-item', JSON.stringify(item));
                     optgroup.appendChild(option);
                 });
                 
@@ -123,24 +130,32 @@ function loadItems() {
 
 // Update item details display
 function updateItemDetails() {
-    const itemId = document.getElementById('item-selector').value;
+    const itemSelector = document.getElementById('item-selector');
     const itemDetailsElement = document.getElementById('item-details');
     
-    if (itemId && itemDetailsElement) {
-        fetch(`/items`)
-            .then(response => response.json())
-            .then(items => {
-                const item = items.find(i => i.item_id == itemId);
-                if (item) {
-                    itemDetailsElement.innerHTML = `
-                        <div class="item-category"><strong>Category:</strong> ${item.category}</div>
-                        <div class="item-brand"><strong>Brand:</strong> ${item.brand}</div>
-                        <div class="item-price"><strong>Price:</strong> £${item.price.toFixed(2)}</div>
-                        <div class="item-description">${item.description}</div>
-                    `;
-                    itemDetailsElement.style.display = 'block';
-                }
-            });
+    if (itemSelector.value && itemDetailsElement) {
+        const selectedOption = itemSelector.options[itemSelector.selectedIndex];
+        const itemData = JSON.parse(selectedOption.getAttribute('data-item'));
+        
+        const stockStatus = itemData.stock_level > 20 ? 'In Stock' : 
+                          itemData.stock_level > 0 ? 'Low Stock' : 
+                          'Out of Stock';
+        
+        itemDetailsElement.innerHTML = `
+            <div class="item-info">
+                <p><strong>Category:</strong> ${itemData.main_category} > ${itemData.subcategory}</p>
+                <p><strong>Brand:</strong> ${itemData.brand}</p>
+                <p><strong>Price:</strong> £${itemData.price.toFixed(2)}</p>
+                <p><strong>Condition:</strong> ${itemData.condition}</p>
+                <p><strong>Rating:</strong> ${itemData.average_rating.toFixed(1)} (${itemData.num_ratings} ratings)</p>
+                <p><strong>Stock:</strong> ${stockStatus} (${itemData.stock_level} units)</p>
+                <p><strong>Tags:</strong> ${itemData.tags.join(', ')}</p>
+                ${itemData.color ? `<p><strong>Color:</strong> ${itemData.color}</p>` : ''}
+                ${itemData.size ? `<p><strong>Size:</strong> ${itemData.size}</p>` : ''}
+                <p class="item-description"><strong>Description:</strong> ${itemData.description}</p>
+            </div>
+        `;
+        itemDetailsElement.style.display = 'block';
     } else if (itemDetailsElement) {
         itemDetailsElement.style.display = 'none';
     }
@@ -159,6 +174,8 @@ function getUserRecommendations() {
         num_recommendations: 6
     };
     
+    console.log('Sending user recommendation request:', requestData);
+    
     fetch('/get_recommendations', {
         method: 'POST',
         headers: {
@@ -166,11 +183,19 @@ function getUserRecommendations() {
         },
         body: JSON.stringify(requestData)
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
     .then(recommendations => {
+        console.log('Received recommendations:', recommendations);
         displayRecommendations(recommendations, 'user-recommendations');
     })
-    .catch(error => console.error('Error getting recommendations:', error));
+    .catch(error => {
+        console.error('Error getting recommendations:', error);
+        const container = document.querySelector('#user-recommendations .recommendation-results');
+        container.innerHTML = '<p class="error">Error loading recommendations. Please try again.</p>';
+    });
 }
 
 // Get similar items for a selected item
@@ -186,6 +211,8 @@ function getItemRecommendations() {
         num_recommendations: 6
     };
     
+    console.log('Sending item recommendation request:', requestData);
+    
     fetch('/get_recommendations', {
         method: 'POST',
         headers: {
@@ -193,11 +220,15 @@ function getItemRecommendations() {
         },
         body: JSON.stringify(requestData)
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
     .then(recommendations => {
+        console.log('Received recommendations:', recommendations);
         displayRecommendations(recommendations, 'item-recommendations');
     })
-    .catch(error => console.error('Error getting similar items:', error));
+    .catch(error => console.error('Error getting recommendations:', error));
 }
 
 // Get popular items
@@ -224,51 +255,93 @@ function getPopularItems() {
 
 // Display recommendations in the appropriate container
 function displayRecommendations(recommendations, containerId) {
+    console.log(`Displaying recommendations in ${containerId}:`, recommendations);
     const container = document.querySelector(`#${containerId} .recommendation-results`);
     
     // Clear existing content
     container.innerHTML = '';
     
     if (!recommendations || recommendations.length === 0) {
+        console.log('No recommendations found');
         container.innerHTML = '<p class="placeholder">No recommendations found</p>';
         return;
     }
     
     // Create item cards for each recommendation
-    recommendations.forEach(item => {
+    recommendations.forEach((item, index) => {
+        console.log(`Creating card for item ${index}:`, item);
         const itemCard = document.createElement('div');
         itemCard.className = 'item-card';
         
         // Format the score as percentage for better readability
         const scorePercent = Math.round((item.score / 5) * 100);
         
-        // Create category badge class based on category
-        const categoryClass = item.category.toLowerCase().replace(/\s+/g, '-');
+        // Create category badge class based on main category
+        const categoryClass = item.main_category.toLowerCase().replace(/\s+/g, '-');
+        
+        // Create tags HTML
+        const tagsHtml = item.tags
+            ? `<div class="tags">
+                ${Array.isArray(item.tags) ? item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : ''}
+               </div>`
+            : '';
+        
+        // Create size and color info for fashion/sports items
+        const sizeColorHtml = (item.main_category === 'Fashion' || item.main_category === 'Sports')
+            ? `<p class="item-variant">
+                ${item.color ? `<span class="color">${item.color}</span>` : ''}
+                ${item.size ? `<span class="size">Size: ${item.size}</span>` : ''}
+               </p>`
+            : '';
+        
+        // Create stock level indicator
+        const stockLevelClass = item.stock_level > 20 ? 'in-stock' : item.stock_level > 0 ? 'low-stock' : 'out-of-stock';
+        const stockText = item.stock_level > 20 ? 'In Stock' : item.stock_level > 0 ? 'Low Stock' : 'Out of Stock';
         
         // Create HTML for the item card
         itemCard.innerHTML = `
             <div class="item-header">
-                <span class="category-badge ${categoryClass}">${item.category}</span>
+                <span class="category-badge ${categoryClass}">${item.main_category}</span>
+                <span class="subcategory-badge">${item.subcategory}</span>
                 <h4>${item.name}</h4>
                 <span class="score-badge">${scorePercent}% Match</span>
             </div>
             <div class="item-body">
-                <p class="item-meta">${item.brand}</p>
+                <div class="item-meta">
+                    <p class="brand">${item.brand}</p>
+                    <p class="condition">${item.condition}</p>
+                </div>
+                ${tagsHtml}
+                ${sizeColorHtml}
                 <p class="item-price">£${item.price.toFixed(2)}</p>
                 <p class="item-description">${item.description}</p>
-                ${item.popularity ? `<p class="item-popularity"><strong>Popularity:</strong> ${item.popularity} ratings</p>` : ''}
-                <button class="add-to-cart">Add to Cart</button>
+                <div class="item-stats">
+                    <span class="rating">
+                        <i class="fas fa-star"></i> ${item.average_rating.toFixed(1)}
+                        <small>(${item.num_ratings} ratings)</small>
+                    </span>
+                    <span class="stock ${stockLevelClass}">
+                        <i class="fas fa-box"></i> ${stockText}
+                    </span>
+                </div>
+                ${item.popularity ? `<p class="item-popularity"><i class="fas fa-fire"></i> ${item.popularity} ratings</p>` : ''}
+                <button class="add-to-cart" ${item.stock_level === 0 ? 'disabled' : ''}>
+                    ${item.stock_level === 0 ? 'Out of Stock' : 'Add to Cart'}
+                </button>
             </div>
         `;
         
         container.appendChild(itemCard);
+        console.log(`Card created for item ${index}`);
     });
     
     // Add event listeners to add-to-cart buttons
     document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productName = this.closest('.item-card').querySelector('h4').textContent;
-            alert(`Added ${productName} to cart! (Demo functionality)`);
-        });
+        if (!button.disabled) {
+            button.addEventListener('click', function() {
+                const productName = this.closest('.item-card').querySelector('h4').textContent;
+                alert(`Added ${productName} to cart! (Demo functionality)`);
+            });
+        }
     });
 } 

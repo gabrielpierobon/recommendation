@@ -19,37 +19,55 @@ def index():
     """Render the main page"""
     return render_template('index.html')
 
-@app.route('/get_recommendations', methods=['POST'])
-def get_recommendations():
-    """Get recommendations based on user input"""
-    data = request.get_json()
-    user_id = data.get('user_id', None)
-    item_id = data.get('item_id', None)
-    num_recommendations = int(data.get('num_recommendations', 5))  # Convert to int to be safe
-    
-    if user_id:
-        # Get user-based recommendations
-        recommendations = rec_engine.recommend_for_user(user_id, num_recommendations)
-    elif item_id:
-        # Get item-based recommendations
-        recommendations = rec_engine.recommend_similar_items(item_id, num_recommendations)
-    else:
-        # Get popular items
-        recommendations = rec_engine.recommend_popular_items(num_recommendations)
-    
-    return jsonify(recommendations)
+@app.route('/users')
+def get_users():
+    """Get all users"""
+    try:
+        users = rec_engine.get_all_users()
+        return jsonify(users)
+    except Exception as e:
+        print(f"Error getting users: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/items')
 def get_items():
-    """Get all available items"""
-    items = rec_engine.get_all_items()
-    return jsonify(items)
+    """Get all items"""
+    try:
+        items = rec_engine.get_all_items()
+        return jsonify(items)
+    except Exception as e:
+        print(f"Error getting items: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
-@app.route('/users')
-def get_users():
-    """Get all available users"""
-    users = rec_engine.get_all_users()
-    return jsonify(users)
+@app.route('/get_recommendations', methods=['POST'])
+def get_recommendations():
+    """Get recommendations based on user input"""
+    try:
+        data = request.get_json()
+        print(f"Received recommendation request: {data}")
+        
+        user_id = data.get('user_id', None)
+        item_id = data.get('item_id', None)
+        num_recommendations = int(data.get('num_recommendations', 5))  # Convert to int to be safe
+        
+        if user_id:
+            # Get user-based recommendations
+            print(f"Getting recommendations for user {user_id}")
+            recommendations = rec_engine.recommend_for_user(user_id, num_recommendations)
+        elif item_id:
+            # Get item-based recommendations
+            print(f"Getting recommendations for item {item_id}")
+            recommendations = rec_engine.recommend_similar_items(item_id, num_recommendations)
+        else:
+            # Get popular items
+            print("Getting popular item recommendations")
+            recommendations = rec_engine.recommend_popular_items(num_recommendations)
+        
+        print(f"Generated {len(recommendations)} recommendations")
+        return jsonify(recommendations)
+    except Exception as e:
+        print(f"Error generating recommendations: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True) 
