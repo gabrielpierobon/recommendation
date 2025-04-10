@@ -20,11 +20,16 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
+# Virtual Environment - exclude everything
 venv/
+venv*/
 ENV/
 env/
 .env/
+.venv/
+**/venv/
+**/ENV/
+**/env/
 
 # IDE
 .idea/
@@ -52,6 +57,8 @@ models/
 *.pkl
 *.model
 data/
+*.pyd
+*.dll
 
 # Testing
 .coverage
@@ -81,6 +88,28 @@ site/
 checkpoint
 *.pb
 *.pbtxt
+**/tensorflow/
+**/torch/
+**/site-packages/
+
+# Large files
+*.pyd
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.exe
+*.bin
+*.dat
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.jar
+*.war
+*.ear
+*.iso
 
 # Distribution / packaging
 .Python
